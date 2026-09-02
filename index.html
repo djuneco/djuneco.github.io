@@ -25,7 +25,7 @@
         margin: 0;
       }
       svg {
-        margin: 0 0 42px 0;
+        margin: 42px 0;
       }
       h1 {
         font-style: italic;
@@ -61,7 +61,8 @@
       }
       figure {
         background-color: rgb(248, 247, 245);
-        margin: 42px 0 0 0;
+        cursor: pointer;
+        margin: 42px 0;
         height: 320px;
         width: 320px;
       }
@@ -76,6 +77,7 @@
     <main>
       <svg viewBox="0 0 352 468" height="42">
         <path d="M 229.537,446.868 C 247.387,422.164,256.321,387.695,256.321,343.441 L 256.321,34.651 C 307.323,66.622,335.52,138.695,335.52,257.041 335.52,335.793,317.105,423.469,229.537,446.868 M 16.56,257.041 C 16.56,138.695,44.757,66.622,95.76,34.651 L 95.76,436.744 C 31.101,404.024,16.56,327.011,16.56,257.041 M 182.16,15.12 C 203.366,15.12,222.618,18.686,239.76,25.994 L 239.76,66.122 C 230.687,59.11,218.404,56.16,203.761,56.16 150.48,56.16,124.561,103.68,113.761,136.08 113.362,137.276,112.865,138.223,112.32,138.942 L 112.32,25.994 C 129.462,18.687,148.714,15.12,169.92,15.12 Z M 117.687,151.889 C 126.859,95.472,150.461,66.96,195.841,66.96 226.062,66.96,239.743,80.625,239.76,124.481 L 239.76,143.285 239.758,143.28 C 239.758,145.441,238.317,146.16,236.157,146.16 227.195,146.16,144.309,151.441,117.687,151.889 M 239.76,250.992 C 238.671,338.901,221.076,398.161,157.016,398.161 126.776,398.161,113.096,383.761,113.096,338.401 L 113.041,338.444 113.041,221.041 C 113.041,195.912,114.35,173.835,117.227,154.816 144.305,155.037,208.005,157.593,239.76,158.659 Z M 178.56,452.881 L 173.52,452.881 C 149.826,453.011,129.595,449.725,112.32,443.739 L 112.32,397.377 C 121.417,405.532,134.031,408.961,149.096,408.961 203.096,408.961,229.736,357.121,239.096,328.321 239.961,325.728,241.285,324.306,242.564,323.88 244.843,349.087,247.68,367.983,247.68,393.842 247.68,414.906,229.87,429.812,200.939,451.908 193.841,452.584,186.395,452.924,178.56,452.881 M 188.64,0 L 173.321,0 166.799,0 163.44,0 C 59.04,0,0,100.081,0,233.281 0,342.001,55.44,468.001,175.68,468.001 L 176.08,467.895 176.4,468.001 C 296.64,468.001,352.081,342.001,352.081,233.281 352.081,100.081,293.04,0,188.64,0"/>
+        <title>Djune</title>
       </svg>
       <h1>
         Djune is a digital creative agency for<br/>discerning e-commerce brands.
@@ -84,13 +86,13 @@
         Websites
       </h2>
       <p>
-        We create beautiful Shopify websites, tailored to your brand, for optimal growth. View our e-commerce design system here: <a target="_blank" href="https://rvdmijnsbrugge.myshopify.com">Emergence</a>.
+        We create beautiful Shopify websites, tailored to your brand, for optimal growth. View our e-commerce design system: <a target="_blank" href="https://rvdmijnsbrugge.myshopify.com">Emergence</a>.
       </p>
       <h2>
         Content
       </h2>
       <p>
-        Visit our Instagram photography and video portfolio here: <a target="_blank" href="https://www.instagram.com/djune.studio">@djune.studio</a>.
+        Visit our Instagram photography and video portfolio: <a target="_blank" href="https://www.instagram.com/djune.studio">@djune.studio</a>.
       </p>
       <h2>
         Contact
@@ -98,36 +100,83 @@
       <p>
         <a href="mailto:v@djune.co">v@djune.co</a>
       </p>
-      <figure id="canvas"></figure>
+      <figure id="canvas"><canvas width="1344" height="1344"></canvas></figure>
     </main>
-    <script src="https://cdn.jsdelivr.net/npm/p5/lib/p5.min.js"></script>
     <script>
-      function setup() {
-        createCanvas(672, 672).parent("canvas");
-        stroke(0, 50);
-        noFill();
+      // Strange attractor:  x' = A1 sin(f1 y) + A2 cos(f2 x) + A3 sin(f3 t)
+      //                     y' = A4 cos(f4 x) + A5 sin(f5 y) + A6 cos(f6 t)
+      const BASE = [1, -0.1, -1.7, 1, 0.89, 0.89, -1.7, -1.7, -0.1, 1.3, 1.3, -1.7];
+      const N = 500000, V = 0.1, ALPHA = 50 / 255; // points, time step, ink per point
+      const RANGE = 0.5, DURATION = 6000;           // random excursion, loop length in ms
+      const FROZEN = [8, 11];                       // f3 and f6 scale t; nudging them shatters the drawing
 
-        const A1 =  1,    A2 = -0.1,  A3 = -1.7,
-              A4 =  1,    A5 =  0.89, A6 =  0.89;
+      const canvas = document.querySelector("#canvas canvas");
+      const ctx = canvas.getContext("2d");
+      const W = canvas.width;
 
-        const f1 = -1.7,  f2 = -1.7,  f3 = -0.1,
-              f4 =  1.3,  f5 =  1.3,  f6 = -1.7;
-
-        const v = 0.1;
-        let x = 0, y = 0, t = 0;
-
-        for (let i = 0; i < 500000; i++) {
-          const newX = A1 * sin(f1 * y) + A2 * cos(f2 * x) + A3 * sin(f3 * t);
-          const newY = A4 * cos(f4 * x) + A5 * sin(f5 * y) + A6 * cos(f6 * t);
-          point(
-            map(newX, -4, 4, 0, width),
-            map(newY, -4, 4, 0, height)
-          );
-          x = newX;
-          y = newY;
-          t += v;
+      // Anti-aliased 1px dots: a 3x3 coverage kernel per sub-pixel offset, stored as log(1 - coverage * ALPHA)
+      const SUB = 8, KERNEL = new Float32Array(SUB * SUB * 9);
+      for (let ky = 0; ky < SUB; ky++) for (let kx = 0; kx < SUB; kx++) {
+        const cx = (kx + 0.5) / SUB, cy = (ky + 0.5) / SUB;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          let inside = 0;
+          for (let sy = 0; sy < 16; sy++) for (let sx = 0; sx < 16; sx++) {
+            const ex = dx + (sx + 0.5) / 16 - cx, ey = dy + (sy + 0.5) / 16 - cy;
+            if (ex * ex + ey * ey <= 1) inside++;
+          }
+          KERNEL[(ky * SUB + kx) * 9 + (dy + 1) * 3 + dx + 1] = Math.log(1 - inside / 256 * ALPHA);
         }
       }
+      const LUT = new Uint8Array(2048);
+      for (let i = 0; i < 2048; i++) LUT[i] = Math.min(253, Math.round(255 * (1 - Math.exp(-i / 128))));
+
+      const density = new Float32Array(W * W);
+      const image = ctx.createImageData(W, W);
+      const pixels = new Uint32Array(image.data.buffer);
+
+      function render(p) {
+        density.fill(0);
+        let x = 0, y = 0, t = 0;
+        for (let i = 0; i < N; i++) {
+          const nx = p[0] * Math.sin(p[6] * y) + p[1] * Math.cos(p[7] * x) + p[2] * Math.sin(p[8] * t);
+          const ny = p[3] * Math.cos(p[9] * x) + p[4] * Math.sin(p[10] * y) + p[5] * Math.cos(p[11] * t);
+          const X = (nx + 4) / 8 * W, Y = (ny + 4) / 8 * W;
+          const ix = Math.floor(X), iy = Math.floor(Y);
+          if (ix >= 1 && ix < W - 1 && iy >= 1 && iy < W - 1) {
+            const k = (((Y - iy) * SUB | 0) * SUB + ((X - ix) * SUB | 0)) * 9;
+            const b = iy * W + ix;
+            density[b - W - 1] += KERNEL[k];     density[b - W] += KERNEL[k + 1]; density[b - W + 1] += KERNEL[k + 2];
+            density[b - 1]     += KERNEL[k + 3]; density[b]     += KERNEL[k + 4]; density[b + 1]     += KERNEL[k + 5];
+            density[b + W - 1] += KERNEL[k + 6]; density[b + W] += KERNEL[k + 7]; density[b + W + 1] += KERNEL[k + 8];
+          }
+          x = nx; y = ny; t += V;
+        }
+        for (let i = 0; i < W * W; i++) {
+          const s = density[i];
+          pixels[i] = s < 0 ? LUT[Math.min(2047, -s * 128 | 0)] << 24 : 0;
+        }
+        ctx.putImageData(image, 0, 0);
+      }
+      render(BASE);
+
+      // One loop: drift the coefficients to a random neighbour and back along a cosine, so it
+      // starts and ends at rest on BASE and the final frame is the identical drawing.
+      let start = null, target;
+      function play() {
+        if (start !== null) return;
+        target = BASE.map((v, i) => FROZEN.includes(i) ? v : v + (Math.random() * 2 - 1) * RANGE);
+        start = performance.now();
+        requestAnimationFrame(frame);
+      }
+      function frame(now) {
+        const s = Math.min(1, (now - start) / DURATION);
+        const k = (1 - Math.cos(2 * Math.PI * s)) / 2;
+        render(s < 1 ? BASE.map((v, i) => v + (target[i] - v) * k) : BASE);
+        if (s < 1) requestAnimationFrame(frame); else start = null;
+      }
+      document.getElementById("canvas").addEventListener("click", play);
+      for (const a of document.querySelectorAll("a")) a.addEventListener("mouseenter", play);
+      window.addEventListener("load", () => setTimeout(play, 1000));
     </script>
   </body>
 </html>
