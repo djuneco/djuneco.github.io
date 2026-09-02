@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Djune</title>
+    <style>
+      ::selection {
+        background-color: rgb(240, 238, 233);
+      }
+      html {
+        background: white;
+      }
+      body {
+        -webkit-font-smoothing: antialiased;
+        min-height: calc(100vh - 42px);
+        place-content: center;
+        line-height: 21px;
+        font-size: 13px;
+        display: grid;
+        margin: 21px;
+      }
+      main {
+        max-width: 320px;
+        margin: 0;
+      }
+      svg {
+        margin: 42px 0;
+      }
+      h1 {
+        font-style: italic;
+        margin: 0 0 21px 0;
+        line-height: 21px;
+        font-weight: 400;
+        font-size: 15px;
+      }
+      h2 {
+        font-style: italic;
+        line-height: 21px;
+        font-weight: 400;
+        font-size: 13px;
+        margin: 0;
+      }
+      p {
+        color: rgb(0, 0, 0, 0.875);
+        margin: 0 0 21px 0;
+      }
+      a {
+        text-decoration-color: rgb(0, 0, 0, 0.125);
+        text-underline-offset: 2px;
+        color: rgb(0, 0, 0, 1);
+        font-style: italic;
+        color: inherit;
+      }
+      a:hover,
+      a:focus {
+        text-decoration-color: rgb(0, 0, 0, 0.25);
+      }
+      a:active {
+        text-decoration-color: rgb(0, 0, 0, 0.875);
+      }
+      figure {
+        background-color: rgb(248, 247, 245);
+        margin: 42px 0;
+        height: 320px;
+        width: 320px;
+      }
+      canvas {
+        max-height: 100%;
+        max-width: 100%;
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <svg viewBox="0 0 352 468" height="42">
+        <path d="M 229.537,446.868 C 247.387,422.164,256.321,387.695,256.321,343.441 L 256.321,34.651 C 307.323,66.622,335.52,138.695,335.52,257.041 335.52,335.793,317.105,423.469,229.537,446.868 M 16.56,257.041 C 16.56,138.695,44.757,66.622,95.76,34.651 L 95.76,436.744 C 31.101,404.024,16.56,327.011,16.56,257.041 M 182.16,15.12 C 203.366,15.12,222.618,18.686,239.76,25.994 L 239.76,66.122 C 230.687,59.11,218.404,56.16,203.761,56.16 150.48,56.16,124.561,103.68,113.761,136.08 113.362,137.276,112.865,138.223,112.32,138.942 L 112.32,25.994 C 129.462,18.687,148.714,15.12,169.92,15.12 Z M 117.687,151.889 C 126.859,95.472,150.461,66.96,195.841,66.96 226.062,66.96,239.743,80.625,239.76,124.481 L 239.76,143.285 239.758,143.28 C 239.758,145.441,238.317,146.16,236.157,146.16 227.195,146.16,144.309,151.441,117.687,151.889 M 239.76,250.992 C 238.671,338.901,221.076,398.161,157.016,398.161 126.776,398.161,113.096,383.761,113.096,338.401 L 113.041,338.444 113.041,221.041 C 113.041,195.912,114.35,173.835,117.227,154.816 144.305,155.037,208.005,157.593,239.76,158.659 Z M 178.56,452.881 L 173.52,452.881 C 149.826,453.011,129.595,449.725,112.32,443.739 L 112.32,397.377 C 121.417,405.532,134.031,408.961,149.096,408.961 203.096,408.961,229.736,357.121,239.096,328.321 239.961,325.728,241.285,324.306,242.564,323.88 244.843,349.087,247.68,367.983,247.68,393.842 247.68,414.906,229.87,429.812,200.939,451.908 193.841,452.584,186.395,452.924,178.56,452.881 M 188.64,0 L 173.321,0 166.799,0 163.44,0 C 59.04,0,0,100.081,0,233.281 0,342.001,55.44,468.001,175.68,468.001 L 176.08,467.895 176.4,468.001 C 296.64,468.001,352.081,342.001,352.081,233.281 352.081,100.081,293.04,0,188.64,0"/>
+      </svg>
+      <h1>
+        Djune is a digital creative agency for<br/>discerning e-commerce brands.
+      </h1>
+      <h2>
+        Websites
+      </h2>
+      <p>
+        We create beautiful Shopify websites, tailored to your brand, for optimal growth. View our e-commerce design system here: <a target="_blank" href="https://rvdmijnsbrugge.myshopify.com">Emergence</a>.
+      </p>
+      <h2>
+        Content
+      </h2>
+      <p>
+        Visit our Instagram photography and video portfolio here: <a target="_blank" href="https://www.instagram.com/djune.studio">@djune.studio</a>.
+      </p>
+      <h2>
+        Contact
+      </h2>
+      <p>
+        <a href="mailto:v@djune.co">v@djune.co</a>
+      </p>
+      <figure id="canvas"></figure>
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/p5/lib/p5.min.js"></script>
+    <script>
+      function setup() {
+        createCanvas(672, 672).parent("canvas");
+        stroke(0, 50);
+        noFill();
+
+        const A1 =  1,    A2 = -0.1,  A3 = -1.7,
+              A4 =  1,    A5 =  0.89, A6 =  0.89;
+
+        const f1 = -1.7,  f2 = -1.7,  f3 = -0.1,
+              f4 =  1.3,  f5 =  1.3,  f6 = -1.7;
+
+        const v = 0.1;
+        let x = 0, y = 0, t = 0;
+
+        for (let i = 0; i < 500000; i++) {
+          const newX = A1 * sin(f1 * y) + A2 * cos(f2 * x) + A3 * sin(f3 * t);
+          const newY = A4 * cos(f4 * x) + A5 * sin(f5 * y) + A6 * cos(f6 * t);
+          point(
+            map(newX, -4, 4, 0, width),
+            map(newY, -4, 4, 0, height)
+          );
+          x = newX;
+          y = newY;
+          t += v;
+        }
+      }
+    </script>
+  </body>
+</html>
